@@ -1,40 +1,41 @@
 package io.damo.androidstarter
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.damo.androidstarter.support.*
-import io.damo.androidstarter.support.RemoteData.*
+import io.damo.androidstarter.support.LiveRemoteData
+import io.damo.androidstarter.support.createLiveRemoteData
+import io.damo.androidstarter.support.hasNoValue
+import io.damo.androidstarter.support.resolve
+import io.damo.androidstarter.support.setLoading
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class RandomJokeViewModel(app: Application) : AndroidViewModel(app) {
+class RandomJokeViewModel(
+    private val jokeApi: JokeApi,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
 
-    private val jokeApi: JokeApi = app.appComponent.jokeApi
-    private val joke: MutableLiveRemoteData<JokeView> = createLiveRemoteData()
+    private val joke = createLiveRemoteData<JokeView>()
 
     fun joke(): LiveRemoteData<JokeView> = joke
 
     fun loadJoke() {
         viewModelScope.launch {
-            if (joke.value == null) {
-                joke.value = Loading()
+            if (joke.hasNoValue()) {
+                joke.setLoading()
             }
 
-            joke.value = fetchJoke()
+            joke.resolve(fetchJoke())
         }
     }
 
     private suspend fun fetchJoke() =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             jokeApi
                 .getRandomJoke()
                 .map { JokeView(it.joke) }
-                .toRemoteData()
         }
 }
 

@@ -23,8 +23,22 @@ fun <T> Result<T>.toRemoteData(): RemoteData<T> =
 typealias LiveRemoteData<T> = LiveData<RemoteData<T>>
 typealias MutableLiveRemoteData<T> = MutableLiveData<RemoteData<T>>
 
-fun <T> LifecycleOwner.observe(observable: LiveData<T>, function: (T) -> Unit) =
-    observable.observe(this, Observer { function(it) })
+fun <T> LiveData<T>.observe(owner: LifecycleOwner, function: (T) -> Unit) =
+    observe(owner, Observer(function))
 
 inline fun <reified T> createLiveRemoteData(): MutableLiveRemoteData<T> =
     MutableLiveData<RemoteData<T>>().apply { value = RemoteData.NotLoaded() }
+
+fun <T> MutableLiveRemoteData<T>.setLoading() {
+    value = RemoteData.Loading()
+}
+
+fun <T> MutableLiveRemoteData<T>.resolve(result: Result<T>) {
+    value = result.toRemoteData()
+}
+
+fun <T> MutableLiveRemoteData<T>.hasValue() =
+    value is Loaded
+
+fun <T> MutableLiveRemoteData<T>.hasNoValue() =
+    !hasValue()

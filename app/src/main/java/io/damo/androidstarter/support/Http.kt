@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.*
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
+import okhttp3.ResponseBody
 import java.io.IOException
 
 fun requestBuilder(url: String): Request.Builder =
@@ -46,7 +49,7 @@ inline fun <reified T : Any?> Response.parseJson(): Result<T> =
     try {
         use {
             body
-                ?.let { Success(it.parseDangerously()) }
+                ?.let { Success(it.parseDangerously<T>()) }
                 ?: Failure("Could not parse null response body")
         }
     } catch (e: IOException) {
