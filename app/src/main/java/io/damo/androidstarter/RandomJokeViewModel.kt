@@ -3,6 +3,7 @@ package io.damo.androidstarter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.damo.androidstarter.support.LiveRemoteData
+import io.damo.androidstarter.support.Result
 import io.damo.androidstarter.support.createLiveRemoteData
 import io.damo.androidstarter.support.hasNoValue
 import io.damo.androidstarter.support.resolve
@@ -31,7 +32,7 @@ class RandomJokeViewModel(
         }
     }
 
-    private suspend fun fetchJoke() =
+    private suspend fun fetchJoke(): Result<JokeView> =
         withContext(ioDispatcher) {
             jokeApi
                 .getRandomJoke()

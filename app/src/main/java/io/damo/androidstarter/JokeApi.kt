@@ -1,6 +1,9 @@
 package io.damo.androidstarter
 
-import io.damo.androidstarter.support.*
+import io.damo.androidstarter.support.Result
+import io.damo.androidstarter.support.execute
+import io.damo.androidstarter.support.parseJson
+import io.damo.androidstarter.support.requestBuilder
 
 class JokeApi(private val apiUrl: String) {
 
@@ -11,7 +14,6 @@ class JokeApi(private val apiUrl: String) {
             .map { it.value }
 
     data class RandomJokeJson(
-        val type: String,
         val value: JokeJson
     )
 

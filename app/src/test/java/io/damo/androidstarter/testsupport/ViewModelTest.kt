@@ -1,7 +1,9 @@
-package io.damo.androidstarter.support
+package io.damo.androidstarter.testsupport
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import io.damo.androidstarter.support.LiveRemoteData
+import io.damo.androidstarter.support.RemoteData
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,6 +35,6 @@ open class ViewModelTest {
 
 typealias RemoteDataObserver<T> = Observer<RemoteData<T>>
 
-fun <T> observeWithMock(data: LiveRemoteData<T>) =
+fun <T> observeWithMock(data: LiveRemoteData<T>): RemoteDataObserver<T> =
     mockk<RemoteDataObserver<T>>(relaxed = true)
         .also { data.observeForever(it) }

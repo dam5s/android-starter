@@ -1,12 +1,12 @@
 package io.damo.androidstarter
 
 import io.damo.androidstarter.JokeApi.JokeJson
-import io.damo.androidstarter.support.LiveRemoteDataAssert.Companion.assertThat
 import io.damo.androidstarter.support.RemoteData.Loaded
 import io.damo.androidstarter.support.RemoteData.Loading
 import io.damo.androidstarter.support.Success
-import io.damo.androidstarter.support.ViewModelTest
-import io.damo.androidstarter.support.observeWithMock
+import io.damo.androidstarter.testsupport.LiveRemoteDataAssert.Companion.assertThat
+import io.damo.androidstarter.testsupport.ViewModelTest
+import io.damo.androidstarter.testsupport.observeWithMock
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyOrder

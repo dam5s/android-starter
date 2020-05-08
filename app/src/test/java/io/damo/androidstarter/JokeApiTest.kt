@@ -2,9 +2,9 @@ package io.damo.androidstarter
 
 import io.damo.androidstarter.JokeApi.JokeJson
 import io.damo.androidstarter.support.Success
-import io.damo.androidstarter.support.baseUrl
-import io.damo.androidstarter.support.enqueue
-import io.damo.androidstarter.support.startMockServer
+import io.damo.androidstarter.testsupport.baseUrl
+import io.damo.androidstarter.testsupport.enqueue
+import io.damo.androidstarter.testsupport.startMockServer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Test

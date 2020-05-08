@@ -9,15 +9,17 @@ interface AppComponent {
     val viewModelFactory: ViewModelProvider.Factory
 }
 
-class DefaultAppComponent(app: Application) : AppComponent, ViewModelProvider.Factory {
-
+class DefaultAppComponent(app: Application) : AppComponent {
     override val jokeApi = JokeApi(BuildConfig.API_URL)
-    override val viewModelFactory = this
+    override val viewModelFactory = ViewModelFactory(this)
+}
+
+class ViewModelFactory(private val appComponent: AppComponent) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         when (modelClass) {
-            RandomJokeViewModel::class -> RandomJokeViewModel(jokeApi) as T
+            RandomJokeViewModel::class.java -> RandomJokeViewModel(appComponent.jokeApi) as T
             else -> throw IllegalArgumentException("Unexpected view model class $modelClass")
         }
 }

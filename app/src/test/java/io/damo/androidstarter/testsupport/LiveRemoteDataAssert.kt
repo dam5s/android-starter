@@ -1,5 +1,7 @@
-package io.damo.androidstarter.support
+package io.damo.androidstarter.testsupport
 
+import io.damo.androidstarter.support.Explanation
+import io.damo.androidstarter.support.LiveRemoteData
 import io.damo.androidstarter.support.RemoteData.Error
 import io.damo.androidstarter.support.RemoteData.Loaded
 import io.damo.androidstarter.support.RemoteData.Loading
@@ -11,7 +13,8 @@ class LiveRemoteDataAssert<T>(data: LiveRemoteData<T>) {
     private val value = data.value
 
     companion object {
-        fun <T> assertThat(data: LiveRemoteData<T>) = LiveRemoteDataAssert(data)
+        fun <T> assertThat(data: LiveRemoteData<T>) =
+            LiveRemoteDataAssert(data)
     }
 
     fun isNotLoaded() = apply {

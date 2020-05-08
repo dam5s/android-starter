@@ -1,4 +1,4 @@
-package io.damo.androidstarter.support
+package io.damo.androidstarter.testsupport
 
 import org.assertj.core.api.ObjectAssert
 

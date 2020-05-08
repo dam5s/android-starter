@@ -29,15 +29,15 @@ sealed class Result<A> {
         }
 }
 
-data class Success<T>(val value: T) : Result<T>()
+data class Success<A>(val value: A) : Result<A>()
 
-data class Failure<T>(val reason: Explanation) : Result<T>() {
+data class Failure<A>(val reason: Explanation) : Result<A>() {
 
-    constructor(message: String):
-            this(Explanation(message, listOf()))
+    constructor(message: String) :
+        this(Explanation(message, listOf()))
 
-    constructor(message: String, exception: Exception):
-            this(Explanation(message, listOf(exception)))
+    constructor(message: String, exception: Exception) :
+        this(Explanation(message, listOf(exception)))
 }
 
 data class Explanation(val message: String, val exceptions: List<Exception>)
