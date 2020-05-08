@@ -1,11 +1,11 @@
 package io.damo.androidstarter
 
 import io.damo.androidstarter.JokeApi.JokeJson
+import io.damo.androidstarter.support.LiveRemoteDataAssert.Companion.assertThat
 import io.damo.androidstarter.support.RemoteData.Loaded
 import io.damo.androidstarter.support.RemoteData.Loading
 import io.damo.androidstarter.support.Success
 import io.damo.androidstarter.support.ViewModelTest
-import io.damo.androidstarter.support.isNotLoaded
 import io.damo.androidstarter.support.observeWithMock
 import io.mockk.every
 import io.mockk.mockk
@@ -27,7 +27,7 @@ class RandomJokeViewModelTest : ViewModelTest() {
         val viewModelData = viewModel.joke()
         val observer = observeWithMock(viewModelData)
 
-        assert(viewModelData.isNotLoaded())
+        assertThat(viewModelData).isNotLoaded()
 
         viewModel.loadJoke()
 
