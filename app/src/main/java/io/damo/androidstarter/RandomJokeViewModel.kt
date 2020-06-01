@@ -17,10 +17,7 @@ class RandomJokeViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    private val cachedJoke: JokeView?
-        get() = appPreferences.getJoke()?.let { JokeView(it) }
-
-    private val joke = createLiveRemoteData(cachedJoke)
+    private val joke = createLiveRemoteData(cachedJoke())
 
     fun joke(): LiveRemoteData<JokeView> = joke
 
@@ -36,6 +33,9 @@ class RandomJokeViewModel(
                 .getRandomJoke()
                 .map { JokeView(it.joke) }
         }
+
+    private fun cachedJoke(): JokeView? =
+        appPreferences.getJoke()?.let { JokeView(it) }
 }
 
 data class JokeView(val content: String)
