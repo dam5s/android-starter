@@ -29,8 +29,8 @@ class LiveRemoteDataAssert<T>(data: LiveRemoteData<T>) {
         assertThat(value).hasType<Loaded<T>>()
     }
 
-    fun isLoadedWith(value: T) = apply {
-        assertThat(value).isEqualTo(Loaded(value))
+    fun isLoadedWith(expected: T) = apply {
+        assertThat(value).isEqualTo(Loaded(expected))
     }
 
     fun hasErrored() = apply {

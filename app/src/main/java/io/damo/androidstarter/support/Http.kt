@@ -42,6 +42,14 @@ fun Request.Builder.execute(okHttpClient: OkHttpClient): Result<Response> =
         Failure("There was an error contacting the server: ${e.message}", e)
     }
 
+fun Result<Response>.requireStatusCode(expectedCode: Int): Result<Response> =
+    bind {
+        when (it.code) {
+            expectedCode -> Success(it)
+            else -> Failure<Response>("Expected server response to be a $expectedCode")
+        }
+    }
+
 fun Response.closeQuietly(): Unit =
     use { Unit }
 

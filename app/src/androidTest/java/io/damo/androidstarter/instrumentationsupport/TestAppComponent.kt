@@ -8,9 +8,15 @@ import io.damo.androidstarter.ViewModelFactory
 
 class TestAppComponent(app: Application) : AppComponent by DefaultAppComponent(app) {
 
-    private val mockServer = startMockServer(TestDispatcher())
+    val testDispatcher = TestDispatcher()
+
+    private val mockServer = startMockServer(testDispatcher)
     private val baseUrl = mockServer.baseUrl()
 
     override val jokeApi = JokeApi(baseUrl)
     override val viewModelFactory = ViewModelFactory(this)
+
+    fun shutdownServer() {
+        mockServer.shutdown()
+    }
 }
