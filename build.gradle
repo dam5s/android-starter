@@ -23,7 +23,7 @@ task clean(type: Delete) {
 }
 
 task("localBuild") {
-//    dependsOn(":app:ktlint")
+    dependsOn(":app:ktlint")
     dependsOn(":app:testDebugUnitTest")
     dependsOn(":app:connectedDebugAndroidTest")
 }
