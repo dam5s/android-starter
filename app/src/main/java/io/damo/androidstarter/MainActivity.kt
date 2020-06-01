@@ -13,6 +13,7 @@ import io.damo.androidstarter.support.RemoteData.Loading
 import io.damo.androidstarter.support.RemoteData.NotLoaded
 import io.damo.androidstarter.support.observe
 import kotlinx.android.synthetic.main.activity_main.jokeTextView
+import kotlinx.android.synthetic.main.activity_main.refreshButton
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -32,16 +33,28 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         viewModel.joke().observe(this) { jokeData ->
             jokeTextView.text =
                 when (jokeData) {
-                    is NotLoaded -> "-"
-                    is Loading -> "Loading..."
-                    is Loaded -> jokeData.data.content
-                    is Error -> jokeData.explanation.message
+                    is NotLoaded -> {
+                        viewModel.loadJoke()
+                        refreshButton.isEnabled = false
+                        "-"
+                    }
+                    is Loading -> {
+                        refreshButton.isEnabled = false
+                        "Loading..."
+                    }
+                    is Loaded -> {
+                        refreshButton.isEnabled = true
+                        jokeData.data.content
+                    }
+                    is Error -> {
+                        refreshButton.isEnabled = true
+                        jokeData.explanation.message
+                    }
                 }
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadJoke()
+        refreshButton.setOnClickListener {
+            viewModel.loadJoke()
+        }
     }
 }
