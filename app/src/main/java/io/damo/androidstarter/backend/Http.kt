@@ -1,9 +1,12 @@
-package io.damo.androidstarter.support
+package io.damo.androidstarter.backend
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.damo.androidstarter.support.Failure
+import io.damo.androidstarter.support.Result
+import io.damo.androidstarter.support.Success
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient

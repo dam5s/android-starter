@@ -1,6 +1,8 @@
-package io.damo.androidstarter
+package io.damo.androidstarter.randomjoke
 
-import io.damo.androidstarter.JokeApi.JokeJson
+import io.damo.androidstarter.AppPreferences
+import io.damo.androidstarter.backend.JokeApi
+import io.damo.androidstarter.backend.JokeApi.JokeJson
 import io.damo.androidstarter.support.RemoteData.Loaded
 import io.damo.androidstarter.support.RemoteData.Loading
 import io.damo.androidstarter.support.RemoteData.NotLoaded

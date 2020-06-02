@@ -1,4 +1,4 @@
-package io.damo.androidstarter
+package io.damo.androidstarter.randomjoke
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import io.damo.androidstarter.R
+import io.damo.androidstarter.appComponent
 import io.damo.androidstarter.support.RemoteData
 import io.damo.androidstarter.support.RemoteData.Loading
 import io.damo.androidstarter.support.RemoteData.NotLoaded

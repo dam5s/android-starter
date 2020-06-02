@@ -1,10 +1,6 @@
-package io.damo.androidstarter
+package io.damo.androidstarter.backend
 
 import io.damo.androidstarter.support.Result
-import io.damo.androidstarter.support.execute
-import io.damo.androidstarter.support.parseJson
-import io.damo.androidstarter.support.requestBuilder
-import io.damo.androidstarter.support.requireStatusCode
 
 class JokeApi(private val apiUrl: String) {
 

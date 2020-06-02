@@ -1,7 +1,9 @@
-package io.damo.androidstarter
+package io.damo.androidstarter.randomjoke
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.damo.androidstarter.AppPreferences
+import io.damo.androidstarter.backend.JokeApi
 import io.damo.androidstarter.support.LiveRemoteData
 import io.damo.androidstarter.support.Result
 import io.damo.androidstarter.support.createLiveRemoteData

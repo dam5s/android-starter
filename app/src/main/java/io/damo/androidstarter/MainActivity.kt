@@ -8,6 +8,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import io.damo.androidstarter.categories.CategoriesFragment
+import io.damo.androidstarter.randomjoke.RandomJokeFragment
 import kotlinx.android.synthetic.main.activity_main.bottomNavigation
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {

@@ -1,5 +1,6 @@
-package io.damo.androidstarter
+package io.damo.androidstarter.randomjoke
 
+import io.damo.androidstarter.MainScreen
 import io.damo.androidstarter.instrumentationsupport.TestAppContext
 import io.damo.androidstarter.instrumentationsupport.TestDispatcher.Companion.randomJokes
 import io.damo.androidstarter.instrumentationsupport.startMainActivity

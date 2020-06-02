@@ -3,6 +3,8 @@ package io.damo.androidstarter
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.damo.androidstarter.backend.JokeApi
+import io.damo.androidstarter.randomjoke.RandomJokeViewModel
 
 interface AppComponent {
     val jokeApi: JokeApi

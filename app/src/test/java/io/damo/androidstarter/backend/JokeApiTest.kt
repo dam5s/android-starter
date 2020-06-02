@@ -1,6 +1,6 @@
-package io.damo.androidstarter
+package io.damo.androidstarter.backend
 
-import io.damo.androidstarter.JokeApi.JokeJson
+import io.damo.androidstarter.backend.JokeApi.JokeJson
 import io.damo.androidstarter.support.Success
 import io.damo.androidstarter.testsupport.baseUrl
 import io.damo.androidstarter.testsupport.enqueue

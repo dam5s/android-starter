@@ -1,10 +1,11 @@
-package io.damo.androidstarter
+package io.damo.androidstarter.categories
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import io.damo.androidstarter.R
 
 class CategoriesFragment : Fragment() {
 
