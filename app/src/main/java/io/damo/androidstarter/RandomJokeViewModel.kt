@@ -31,7 +31,10 @@ class RandomJokeViewModel(
         withContext(ioDispatcher) {
             jokeApi
                 .getRandomJoke()
-                .map { JokeView(it.joke) }
+                .map {
+                    appPreferences.saveJoke(it.joke)
+                    JokeView(it.joke)
+                }
         }
 
     private fun cachedJoke(): JokeView? =

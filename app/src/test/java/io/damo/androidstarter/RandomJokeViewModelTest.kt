@@ -19,7 +19,7 @@ import org.junit.Test
 class RandomJokeViewModelTest : ViewModelTest() {
 
     private val api = mockk<JokeApi>()
-    private val appPrefs = mockk<AppPreferences>()
+    private val appPrefs = mockk<AppPreferences>(relaxUnitFun = true)
 
     @Test
     fun `test loadJoke() without cache`() = runBlockingTest {
@@ -37,6 +37,7 @@ class RandomJokeViewModelTest : ViewModelTest() {
         verifyOrder {
             observer.onChanged(ofType<NotLoaded<JokeView>>())
             observer.onChanged(ofType<Loading<JokeView>>())
+            appPrefs.saveJoke("Oh hai!")
             observer.onChanged(Loaded(JokeView("Oh hai!")))
         }
     }
