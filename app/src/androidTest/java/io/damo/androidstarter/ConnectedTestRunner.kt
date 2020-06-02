@@ -15,8 +15,8 @@ import org.junit.runner.RunWith
 class ConnectedTestRunner {
 
     @get:Rule
-    val activityRule: ActivityTestRule<FlowTestStartActivity> =
-        ActivityTestRule(FlowTestStartActivity::class.java)
+    val activityRule: ActivityTestRule<ConnectedTestStartActivity> =
+        ActivityTestRule(ConnectedTestStartActivity::class.java)
 
     lateinit var app: StarterApp
     lateinit var testAppContext: TestAppContext
@@ -30,7 +30,7 @@ class ConnectedTestRunner {
     private fun reset() {
         testAppContext.tearDown()
         testAppContext = TestAppContext(app)
-        startTestActivity<FlowTestStartActivity>()
+        startTestActivity<ConnectedTestStartActivity>()
     }
 
     @Test
