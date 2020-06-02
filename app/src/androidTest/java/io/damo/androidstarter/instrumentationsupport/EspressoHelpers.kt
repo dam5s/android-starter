@@ -1,5 +1,7 @@
 package io.damo.androidstarter.instrumentationsupport
 
+import androidx.annotation.StringRes
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -9,6 +11,7 @@ import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import io.damo.androidstarter.R
+import io.damo.androidstarter.StarterApp
 import junit.framework.TestCase.fail
 
 fun startMainActivity() {
@@ -24,6 +27,14 @@ fun waitForButtonEnabled(text: String, isEnabled: Boolean = true, timeoutInMs: L
         timeoutInMs
     )
 }
+
+fun stringFromResId(@StringRes stringRes: Int): String =
+    ApplicationProvider
+        .getApplicationContext<StarterApp>()
+        .getString(stringRes)
+
+fun waitForText(@StringRes stringRes: Int, timeoutInMs: Long = 500) =
+    waitForText(stringFromResId(stringRes), timeoutInMs)
 
 fun waitForText(text: String, timeoutInMs: Long = 500) =
     waitForObject(By.textContains(text), timeoutInMs)

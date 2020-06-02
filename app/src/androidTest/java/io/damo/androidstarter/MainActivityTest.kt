@@ -14,8 +14,7 @@ class MainActivityTest(testAppContext: TestAppContext) {
     fun testCreation() {
         startMainActivity()
 
-        mainScreen.waitForRefreshButtonEnabled()
-        mainScreen.assertJokeDisplayed(randomJokes.first())
+        mainScreen.waitForJoke(randomJokes.first())
     }
 
     fun testCreation_WhenJokeIsCached() {
@@ -25,7 +24,7 @@ class MainActivityTest(testAppContext: TestAppContext) {
 
         startMainActivity()
 
-        mainScreen.assertJokeDisplayed(cachedJoke)
+        mainScreen.waitForJoke(cachedJoke)
     }
 
     fun testCreation_OnLoadFailure() {
@@ -33,24 +32,20 @@ class MainActivityTest(testAppContext: TestAppContext) {
 
         startMainActivity()
 
-        mainScreen.waitForRefreshButtonEnabled()
         mainScreen.assertServerErrorDisplayed()
     }
 
     fun testCreation_RefreshingTheJoke() {
         startMainActivity()
 
-        mainScreen.waitForRefreshButtonEnabled()
-        mainScreen.assertJokeDisplayed(randomJokes[0])
+        mainScreen.waitForJoke(randomJokes[0])
 
-        mainScreen.clickRefresh()
+        mainScreen.startRefresh()
 
-        mainScreen.waitForRefreshButtonEnabled()
-        mainScreen.assertJokeDisplayed(randomJokes[1])
+        mainScreen.waitForJoke(randomJokes[1])
 
-        mainScreen.clickRefresh()
+        mainScreen.startRefresh()
 
-        mainScreen.waitForRefreshButtonEnabled()
-        mainScreen.assertJokeDisplayed(randomJokes[2])
+        mainScreen.waitForJoke(randomJokes[2])
     }
 }
