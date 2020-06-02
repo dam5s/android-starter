@@ -39,10 +39,11 @@ class ConnectedTestRunner {
             { AppPreferencesTest(testAppContext).testSaveJoke() },
             { AppPreferencesTest(testAppContext).testGetJoke() },
 
-            { MainActivityTest(testAppContext).testCreation() },
-            { MainActivityTest(testAppContext).testCreation_WhenJokeIsCached() },
-            { MainActivityTest(testAppContext).testCreation_RefreshingTheJoke() },
-            { MainActivityTest(testAppContext).testCreation_OnLoadFailure() }
+            { MainActivityTest(testAppContext).testNavigation() },
+
+            { RandomJokeFragmentTest(testAppContext).testCreation_WhenJokeIsCached() },
+            { RandomJokeFragmentTest(testAppContext).testCreation_RefreshingTheJoke() },
+            { RandomJokeFragmentTest(testAppContext).testCreation_OnLoadFailure() }
         )
 
         allTests.forEach { test ->
