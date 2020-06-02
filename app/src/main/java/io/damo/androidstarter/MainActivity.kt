@@ -7,9 +7,10 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
 import androidx.fragment.app.commit
-import io.damo.androidstarter.categories.CategoriesFragment
-import io.damo.androidstarter.randomjoke.RandomJokeFragment
+import io.damo.androidstarter.categories.CategoriesTabFragment
+import io.damo.androidstarter.randomjoke.RandomJokeTabFragment
 import kotlinx.android.synthetic.main.activity_main.bottomNavigation
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -25,16 +26,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        displayFragment(RandomJokeFragment())
+        switchTab(RandomJokeTabFragment())
 
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.categoriesNavigationItem -> {
-                    displayFragment(CategoriesFragment())
+                    switchTab(CategoriesTabFragment())
                     true
                 }
                 R.id.randomNavigationItem -> {
-                    displayFragment(RandomJokeFragment())
+                    switchTab(RandomJokeTabFragment())
                     true
                 }
                 else -> false
@@ -42,9 +43,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun displayFragment(fragment: Fragment) {
+    private fun switchTab(fragment: Fragment) {
         supportFragmentManager.commit {
             replace(R.id.fragment, fragment)
+            setTransition(TRANSIT_FRAGMENT_FADE)
         }
     }
 }

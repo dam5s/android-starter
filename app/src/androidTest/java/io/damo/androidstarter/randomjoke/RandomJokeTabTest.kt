@@ -5,7 +5,7 @@ import io.damo.androidstarter.instrumentationsupport.TestAppContext
 import io.damo.androidstarter.instrumentationsupport.TestDispatcher.Companion.randomJokes
 import io.damo.androidstarter.instrumentationsupport.startMainActivity
 
-class RandomJokeFragmentTest(testAppContext: TestAppContext) {
+class RandomJokeTabTest(testAppContext: TestAppContext) {
 
     private val mainScreen = MainScreen(testAppContext)
     private val testAppComponent = testAppContext.testComponent

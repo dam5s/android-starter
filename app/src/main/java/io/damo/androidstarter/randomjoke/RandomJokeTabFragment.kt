@@ -12,10 +12,10 @@ import io.damo.androidstarter.support.RemoteData
 import io.damo.androidstarter.support.RemoteData.Loading
 import io.damo.androidstarter.support.RemoteData.NotLoaded
 import io.damo.androidstarter.support.observe
-import kotlinx.android.synthetic.main.fragment_random_joke.jokeTextView
-import kotlinx.android.synthetic.main.fragment_random_joke.swipeRefresh
+import kotlinx.android.synthetic.main.fragment_random_joke_tab.jokeTextView
+import kotlinx.android.synthetic.main.fragment_random_joke_tab.swipeRefresh
 
-class RandomJokeFragment : Fragment() {
+class RandomJokeTabFragment : Fragment() {
 
     private val viewModel: RandomJokeViewModel by viewModels(
         ownerProducer = ::requireActivity,
@@ -23,7 +23,7 @@ class RandomJokeFragment : Fragment() {
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        inflater.inflate(R.layout.fragment_random_joke, container, false)
+        inflater.inflate(R.layout.fragment_random_joke_tab, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.joke().observe(this) { jokeData ->

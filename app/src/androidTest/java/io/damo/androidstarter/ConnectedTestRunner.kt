@@ -5,8 +5,9 @@ import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import io.damo.androidstarter.categories.CategoriesTabTest
 import io.damo.androidstarter.instrumentationsupport.TestAppContext
-import io.damo.androidstarter.randomjoke.RandomJokeFragmentTest
+import io.damo.androidstarter.randomjoke.RandomJokeTabTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -42,9 +43,11 @@ class ConnectedTestRunner {
 
             { MainActivityTest(testAppContext).testNavigation() },
 
-            { RandomJokeFragmentTest(testAppContext).testCreation_WhenJokeIsCached() },
-            { RandomJokeFragmentTest(testAppContext).testCreation_RefreshingTheJoke() },
-            { RandomJokeFragmentTest(testAppContext).testCreation_OnLoadFailure() }
+            { RandomJokeTabTest(testAppContext).testCreation_WhenJokeIsCached() },
+            { RandomJokeTabTest(testAppContext).testCreation_RefreshingTheJoke() },
+            { RandomJokeTabTest(testAppContext).testCreation_OnLoadFailure() },
+
+            { CategoriesTabTest(testAppContext).testNavigation() }
         )
 
         allTests.forEach { test ->
