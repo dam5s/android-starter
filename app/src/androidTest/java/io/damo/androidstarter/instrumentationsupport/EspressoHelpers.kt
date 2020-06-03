@@ -33,6 +33,8 @@ fun stringFromResId(@StringRes stringRes: Int): String =
         .getApplicationContext<StarterApp>()
         .getString(stringRes)
 
+fun checkForText(@StringRes stringRes: Int) = waitForText(stringRes, 0)
+
 fun waitForText(@StringRes stringRes: Int, timeoutInMs: Long = 500) =
     waitForText(stringFromResId(stringRes), timeoutInMs)
 

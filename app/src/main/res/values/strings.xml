@@ -4,4 +4,6 @@
     <string name="refresh">Refresh</string>
     <string name="random">Random</string>
     <string name="categories">Categories</string>
+    <string name="random_title">Random Joke</string>
+    <string name="categories_title">Jokes by Category</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import io.damo.androidstarter.instrumentationsupport.TestAppContext
+import io.damo.androidstarter.instrumentationsupport.checkForText
 import io.damo.androidstarter.instrumentationsupport.waitForText
 import org.hamcrest.CoreMatchers.anything
 
@@ -33,6 +34,7 @@ class MainScreen(testAppContext: TestAppContext) {
 
     fun checkCategoriesTabIsDisplayed() {
         onView(withId(R.id.categoriesList)).check(matches(isDisplayed()))
+        checkForText(R.string.categories_title)
     }
 
     fun clickOnRandomTab() {
@@ -41,6 +43,7 @@ class MainScreen(testAppContext: TestAppContext) {
 
     fun checkRandomTabIsDisplayed() {
         onView(withId(R.id.jokeTextView)).check(matches(isDisplayed()))
+        checkForText(R.string.random_title)
     }
 
     fun checkAllCategoriesAreDisplayed() {
