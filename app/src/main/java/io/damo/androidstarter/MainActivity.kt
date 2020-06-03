@@ -30,13 +30,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         switchTab(Tab.Random)
 
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.categoriesNavigationItem -> switchTab(Tab.Categories)
-                R.id.randomNavigationItem -> switchTab(Tab.Random)
-                else -> false
-            }
+            switchTabByItemId(item.itemId)
         }
     }
+
+    private fun switchTabByItemId(itemId: Int): Boolean =
+        when (itemId) {
+            R.id.categoriesNavigationItem -> switchTab(Tab.Categories)
+            R.id.randomNavigationItem -> switchTab(Tab.Random)
+            else -> false
+        }
 
     private fun switchTab(tab: Tab): Boolean {
         supportFragmentManager.commit {

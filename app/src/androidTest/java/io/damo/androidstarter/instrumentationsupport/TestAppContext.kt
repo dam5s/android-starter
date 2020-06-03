@@ -11,6 +11,7 @@ class TestAppContext(val app: StarterApp) {
     }
 
     fun tearDown() {
+        device().setOrientationNatural()
         testComponent.shutdownServer()
         testComponent.appPreferences.clear()
     }

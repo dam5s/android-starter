@@ -42,6 +42,7 @@ class ConnectedTestRunner {
             { AppPreferencesTest(testAppContext).testGetJoke() },
 
             { MainActivityTest(testAppContext).testNavigation() },
+            { MainActivityTest(testAppContext).testSavingStateOnScreenRotation() },
 
             { RandomJokeTabTest(testAppContext).testCreation_WhenJokeIsCached() },
             { RandomJokeTabTest(testAppContext).testCreation_RefreshingTheJoke() },
