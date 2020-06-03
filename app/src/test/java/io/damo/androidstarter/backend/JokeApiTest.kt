@@ -1,6 +1,5 @@
 package io.damo.androidstarter.backend
 
-import io.damo.androidstarter.backend.JokeApi.JokeJson
 import io.damo.androidstarter.support.Success
 import io.damo.androidstarter.testsupport.baseUrl
 import io.damo.androidstarter.testsupport.enqueue
@@ -43,5 +42,32 @@ class JokeApiTest {
         val recordedRequest = mockServer.takeRequest()
         assertThat(recordedRequest.method).isEqualTo("GET")
         assertThat(recordedRequest.path).isEqualTo("/jokes/random")
+    }
+
+    @Test
+    fun getJokesForCategory() {
+        mockServer.enqueue(
+            body = """{
+                "type": "success", 
+                "value": [
+                    { "id": 605, "joke": "Joke #605" }, 
+                    { "id": 606, "joke": "Joke #606" }, 
+                    { "id": 607, "joke": "Joke #607" } 
+                ]
+            }"""
+        )
+
+        val result = api.getJokesForCategory("My-Category")
+
+        val expectedJokes = listOf(
+            JokeJson(605, "Joke #605"),
+            JokeJson(606, "Joke #606"),
+            JokeJson(607, "Joke #607")
+        )
+        assertThat(result).isEqualTo(Success(expectedJokes))
+
+        val recordedRequest = mockServer.takeRequest()
+        assertThat(recordedRequest.method).isEqualTo("GET")
+        assertThat(recordedRequest.path).isEqualTo("/jokes/random/3?limitTo=[my-category]")
     }
 }

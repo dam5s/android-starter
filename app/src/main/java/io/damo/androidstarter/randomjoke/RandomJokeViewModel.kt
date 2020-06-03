@@ -23,11 +23,10 @@ class RandomJokeViewModel(
 
     fun joke(): LiveRemoteData<JokeView> = joke
 
-    fun loadJoke() {
+    fun loadJoke() =
         viewModelScope.launch {
             joke.loadWith(::fetchJoke)
         }
-    }
 
     private suspend fun fetchJoke(): Result<JokeView> =
         withContext(ioDispatcher) {

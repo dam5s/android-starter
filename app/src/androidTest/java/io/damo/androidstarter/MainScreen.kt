@@ -9,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import io.damo.androidstarter.instrumentationsupport.TestAppContext
+import io.damo.androidstarter.instrumentationsupport.TestDispatcher.Companion.randomJokes
 import io.damo.androidstarter.instrumentationsupport.checkForText
 import io.damo.androidstarter.instrumentationsupport.waitForText
 import org.hamcrest.CoreMatchers.anything
@@ -47,9 +48,9 @@ class MainScreen(testAppContext: TestAppContext) {
     }
 
     fun checkAllCategoriesAreDisplayed() {
-        onData(anything()).atPosition(0).check(matches(withText("explicit")))
-        onData(anything()).atPosition(1).check(matches(withText("nerdy")))
-        onData(anything()).atPosition(2).check(matches(withText("other")))
+        onData(anything()).atPosition(0).check(matches(withText("Explicit")))
+        onData(anything()).atPosition(1).check(matches(withText("Nerdy")))
+        onData(anything()).atPosition(2).check(matches(withText("Other")))
     }
 
     fun clickCategoryByName(category: String) {
@@ -57,6 +58,13 @@ class MainScreen(testAppContext: TestAppContext) {
     }
 
     fun checkCategoryIsDisplayed(category: String) {
-        onView(withId(R.id.categoryJokesText)).check(matches(withText(category)))
+        onView(withId(R.id.categoryJokesList)).check(matches(isDisplayed()))
+        checkForText("$category Jokes")
+    }
+
+    fun checkNerdyCategoryJokesAreDisplayed() {
+        onData(anything()).atPosition(0).check(matches(withText(randomJokes[0])))
+        onData(anything()).atPosition(1).check(matches(withText(randomJokes[1])))
+        onData(anything()).atPosition(2).check(matches(withText(randomJokes[2])))
     }
 }

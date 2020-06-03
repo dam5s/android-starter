@@ -48,7 +48,7 @@ class CategoriesListAdapter(appContext: Context) : BaseAdapter() {
 data class CategoryView(val name: String) : Serializable
 
 private val allCategories = listOf(
-    CategoryView("explicit"),
-    CategoryView("nerdy"),
-    CategoryView("other")
+    CategoryView("Explicit"),
+    CategoryView("Nerdy"),
+    CategoryView("Other")
 )

@@ -14,8 +14,8 @@ class CategoriesTabTest(testAppContext: TestAppContext) {
 
         mainScreen.checkAllCategoriesAreDisplayed()
 
-        mainScreen.clickCategoryByName("nerdy")
-
-        mainScreen.checkCategoryIsDisplayed("nerdy")
+        mainScreen.clickCategoryByName("Nerdy")
+        mainScreen.checkCategoryIsDisplayed("Nerdy")
+        mainScreen.checkNerdyCategoryJokesAreDisplayed()
     }
 }
