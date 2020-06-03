@@ -23,6 +23,8 @@ class RandomJokeTabFragment : Fragment() {
         inflater.inflate(R.layout.fragment_random_joke_tab, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity?.title = getString(R.string.random_title)
+
         val viewModel = activityViewModelProvider.get<RandomJokeViewModel>()
 
         viewModel.joke().observe(this) { jokeData ->

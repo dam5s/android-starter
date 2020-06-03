@@ -6,6 +6,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import io.damo.androidstarter.instrumentationsupport.TestAppContext
@@ -66,5 +67,9 @@ class MainScreen(testAppContext: TestAppContext) {
         onData(anything()).atPosition(0).check(matches(withText(randomJokes[0])))
         onData(anything()).atPosition(1).check(matches(withText(randomJokes[1])))
         onData(anything()).atPosition(2).check(matches(withText(randomJokes[2])))
+    }
+
+    fun clickUpButton() {
+        onView(withContentDescription("Navigate up")).perform(click())
     }
 }

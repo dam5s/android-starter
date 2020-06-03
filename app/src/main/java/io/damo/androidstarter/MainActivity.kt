@@ -5,16 +5,21 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
-import androidx.annotation.StringRes
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.commit
 import io.damo.androidstarter.categories.CategoriesTabFragment
+import io.damo.androidstarter.categories.CategoryJokesFragment
+import io.damo.androidstarter.categories.CategoryView
 import io.damo.androidstarter.randomjoke.RandomJokeTabFragment
 import kotlinx.android.synthetic.main.activity_main.bottomNavigation
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity :
+    AppCompatActivity(R.layout.activity_main),
+    CategoriesTabFragment.Delegate {
 
     companion object {
         fun start(context: Context) {
@@ -32,7 +37,31 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             switchTabByItemId(item.itemId)
         }
+
+        supportFragmentManager.addOnBackStackChangedListener {
+            val backStackIsNotEmpty = supportFragmentManager.backStackEntryCount > 0
+            supportActionBar?.setDisplayHomeAsUpEnabled(backStackIsNotEmpty)
+        }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
+            android.R.id.home -> {
+                supportFragmentManager.popBackStack()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
+    override fun navigateToCategory(category: CategoryView) =
+        addFragmentToBackStack(CategoryJokesFragment.create(category))
+
+    private fun addFragmentToBackStack(fragment: Fragment) =
+        supportFragmentManager.commit {
+            setTransition(TRANSIT_FRAGMENT_OPEN)
+            replace(R.id.fragment, fragment)
+            addToBackStack(null)
+        }
 
     private fun switchTabByItemId(itemId: Int): Boolean =
         when (itemId) {
@@ -45,13 +74,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         supportFragmentManager.commit {
             replace(R.id.fragment, tab.fragment)
             setTransition(TRANSIT_FRAGMENT_FADE)
-            title = getString(tab.title)
         }
         return true
     }
 
-    enum class Tab(@StringRes val title: Int, val fragment: Fragment) {
-        Random(R.string.random_title, RandomJokeTabFragment()),
-        Categories(R.string.categories_title, CategoriesTabFragment()),
+    enum class Tab(val fragment: Fragment) {
+        Random(RandomJokeTabFragment()),
+        Categories(CategoriesTabFragment()),
     }
 }
