@@ -44,8 +44,8 @@ class RandomJokeTabFragment : Fragment() {
     private fun updateJokeTextView(jokeData: RemoteData<JokeView>) {
         jokeTextView.text =
             when (jokeData) {
-                is NotLoaded -> "-"
-                is Loading -> "Loading..."
+                is NotLoaded -> ""
+                is Loading -> context?.getString(R.string.loading) ?: ""
                 is Loaded -> jokeData.data.content
                 is Error -> jokeData.explanation.message
             }

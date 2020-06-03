@@ -19,7 +19,7 @@ import io.damo.androidstarter.support.RemoteData.Loaded
 import io.damo.androidstarter.support.RemoteData.Loading
 import io.damo.androidstarter.support.RemoteData.NotLoaded
 
-class CategoryJokesListAdapter(context: Context) : BaseAdapter() {
+class CategoryJokesListAdapter(private val context: Context) : BaseAdapter() {
 
     private val layoutInflater = LayoutInflater.from(context)
 
@@ -31,7 +31,7 @@ class CategoryJokesListAdapter(context: Context) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = convertView ?: layoutInflater.inflate(R.layout.cell_category_joke, parent, false)
-        val viewHolder = ViewHolder(view)
+        val viewHolder = ViewHolder(context, view)
 
         viewHolder.updateWithCell(getCell(position))
 
@@ -70,16 +70,16 @@ class CategoryJokesListAdapter(context: Context) : BaseAdapter() {
             is Error -> 1
         }
 
-    class ViewHolder(view: View) {
+    class ViewHolder(private val context: Context, view: View) {
 
         private val textView = view as TextView
 
         fun updateWithCell(cell: Cell) =
             when (cell) {
                 NotLoadedCell -> Unit
-                LoadingCell -> textView.text = "Loading..."
+                LoadingCell -> textView.text = context.getString(R.string.loading)
                 is LoadedCell -> textView.text = cell.view.content
-                is ErrorCell -> textView.text = cell.explanation.message
+                is ErrorCell -> textView.text = context.getString(R.string.generic_error)
             }
     }
 
