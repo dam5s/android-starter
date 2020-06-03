@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.get
 import io.damo.androidstarter.R
-import io.damo.androidstarter.appComponent
+import io.damo.androidstarter.activityViewModelProvider
 import io.damo.androidstarter.support.RemoteData
+import io.damo.androidstarter.support.RemoteData.Error
+import io.damo.androidstarter.support.RemoteData.Loaded
 import io.damo.androidstarter.support.RemoteData.Loading
 import io.damo.androidstarter.support.RemoteData.NotLoaded
 import io.damo.androidstarter.support.observe
@@ -17,17 +19,14 @@ import kotlinx.android.synthetic.main.fragment_random_joke_tab.swipeRefresh
 
 class RandomJokeTabFragment : Fragment() {
 
-    private val viewModel: RandomJokeViewModel by viewModels(
-        ownerProducer = ::requireActivity,
-        factoryProducer = { appComponent.viewModelFactory }
-    )
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         inflater.inflate(R.layout.fragment_random_joke_tab, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val viewModel = activityViewModelProvider.get<RandomJokeViewModel>()
+
         viewModel.joke().observe(this) { jokeData ->
-            loadJokeIfNeeded(jokeData)
+            loadJokeIfNeeded(jokeData, viewModel)
             updateJokeTextView(jokeData)
             updateSwipeRefresh(jokeData)
         }
@@ -47,14 +46,13 @@ class RandomJokeTabFragment : Fragment() {
             when (jokeData) {
                 is NotLoaded -> "-"
                 is Loading -> "Loading..."
-                is RemoteData.Loaded -> jokeData.data.content
-                is RemoteData.Error -> jokeData.explanation.message
+                is Loaded -> jokeData.data.content
+                is Error -> jokeData.explanation.message
             }
     }
 
-    private fun loadJokeIfNeeded(jokeData: RemoteData<JokeView>) {
-        if (jokeData is NotLoaded) {
+    private fun loadJokeIfNeeded(jokeData: RemoteData<JokeView>, viewModel: RandomJokeViewModel) {
+        if (jokeData is NotLoaded)
             viewModel.loadJoke()
-        }
     }
 }
