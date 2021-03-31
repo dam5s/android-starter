@@ -1,14 +1,16 @@
 package io.damo.androidstarter
 
-import io.damo.androidstarter.AppLifeCycle.AppAction.FinishLoadingCategory
-import io.damo.androidstarter.AppLifeCycle.AppAction.FinishLoadingRandomJoke
-import io.damo.androidstarter.AppLifeCycle.AppAction.StartLoadingCategory
-import io.damo.androidstarter.AppLifeCycle.AppAction.StartLoadingRandomJoke
+import io.damo.androidstarter.AppLifeCycle.Action
+import io.damo.androidstarter.AppLifeCycle.Action.FinishLoadingCategory
+import io.damo.androidstarter.AppLifeCycle.Action.FinishLoadingRandomJoke
+import io.damo.androidstarter.AppLifeCycle.Action.StartLoadingCategory
+import io.damo.androidstarter.AppLifeCycle.Action.StartLoadingRandomJoke
+import io.damo.androidstarter.AppLifeCycle.State
 import io.damo.androidstarter.backend.HttpResult
 import io.damo.androidstarter.backend.RemoteData
 import io.damo.androidstarter.backend.toRemoteData
 import io.damo.androidstarter.joke.JokeView
-import io.damo.androidstarter.prelude.Action
+import io.damo.androidstarter.prelude.Redux
 
 typealias Category = String
 
@@ -22,29 +24,26 @@ object AppLifeCycle {
     fun State.categoryJokes(category: Category): RemoteData<List<JokeView>> =
         jokesByCategory[category] ?: RemoteData.NotLoaded()
 
-    sealed class AppAction : Action {
-        object StartLoadingRandomJoke : AppAction()
-        data class FinishLoadingRandomJoke(val result: HttpResult<JokeView>) : AppAction()
+    sealed class Action : Redux.Action {
+        object StartLoadingRandomJoke : Action()
+        data class FinishLoadingRandomJoke(val result: HttpResult<JokeView>) : Action()
 
-        data class StartLoadingCategory(val category: Category) : AppAction()
+        data class StartLoadingCategory(val category: Category) : Action()
         data class FinishLoadingCategory(
             val category: Category,
             val result: HttpResult<List<JokeView>>
-        ) : AppAction()
+        ) : Action()
     }
 
-    fun reducer(state: State, action: Action): State =
-        if (action is AppAction) {
+    fun reducer(state: State, action: Redux.Action): State =
+        if (action is Action) {
             appReducer(state, action)
         } else {
             state
         }
 }
 
-private fun appReducer(
-    state: AppLifeCycle.State,
-    action: AppLifeCycle.AppAction
-): AppLifeCycle.State =
+private fun appReducer(state: State, action: Action): State =
     when (action) {
         StartLoadingRandomJoke -> state.copy(randomJoke = RemoteData.Loading())
         is FinishLoadingRandomJoke -> state.copy(randomJoke = action.result.toRemoteData())
@@ -53,15 +52,12 @@ private fun appReducer(
         is FinishLoadingCategory -> state.finishLoading(action.category, action.result)
     }
 
-private fun AppLifeCycle.State.startLoading(category: Category): AppLifeCycle.State =
+private fun State.startLoading(category: Category): State =
     jokesByCategory
         .plus(category to RemoteData.Loading())
         .let { updatedJokes -> copy(jokesByCategory = updatedJokes) }
 
-private fun AppLifeCycle.State.finishLoading(
-    category: Category,
-    result: HttpResult<List<JokeView>>
-): AppLifeCycle.State =
+private fun State.finishLoading(category: Category, result: HttpResult<List<JokeView>>): State =
     jokesByCategory
         .plus(category to result.toRemoteData())
         .let { updatedJokes -> copy(jokesByCategory = updatedJokes) }

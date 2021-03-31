@@ -15,10 +15,10 @@ import io.damo.androidstarter.backend.RemoteData
 import io.damo.androidstarter.categories.CategoryJokesInteractions.loadCategory
 import io.damo.androidstarter.databinding.FragmentCategoryJokesBinding
 import io.damo.androidstarter.joke.JokeView
-import io.damo.androidstarter.prelude.Subscriber
+import io.damo.androidstarter.prelude.Redux
 import io.damo.androidstarter.stateStore
 
-class CategoryJokesFragment : Fragment(), Subscriber<RemoteData<List<JokeView>>> {
+class CategoryJokesFragment : Fragment(), Redux.Subscriber<RemoteData<List<JokeView>>> {
 
     companion object {
         private const val categoryNameKey = "categoryName"

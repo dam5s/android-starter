@@ -14,10 +14,10 @@ import io.damo.androidstarter.backend.RemoteData.Loading
 import io.damo.androidstarter.backend.RemoteData.NotLoaded
 import io.damo.androidstarter.databinding.FragmentRandomJokeTabBinding
 import io.damo.androidstarter.joke.JokeView
-import io.damo.androidstarter.prelude.Subscriber
+import io.damo.androidstarter.prelude.Redux
 import io.damo.androidstarter.stateStore
 
-class RandomJokeTabFragment : Fragment(), Subscriber<RemoteData<JokeView>> {
+class RandomJokeTabFragment : Fragment(), Redux.Subscriber<RemoteData<JokeView>> {
 
     private var binding: FragmentRandomJokeTabBinding? = null
 

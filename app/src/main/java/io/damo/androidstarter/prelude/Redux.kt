@@ -1,5 +1,6 @@
 package io.damo.androidstarter.prelude
 
+import io.damo.androidstarter.prelude.Redux.Subscriber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -7,57 +8,59 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.Executors
 
-interface Action
+object Redux {
+    interface Action
 
-interface Subscriber<S> {
-    fun onStateChanged(state: S)
-}
-
-class Store<S>(
-    state: S,
-    val reducer: (S, Action) -> S
-) {
-
-    var state: S = state; private set
-
-    private val subscriptions = mutableListOf<Subscription<S, *>>()
-    private val executor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-    private val scope = CoroutineScope(executor)
-
-    fun dispatch(action: Action) {
-        scope.launch {
-            state = reducer(state, action)
-            subscriptions.forEach { it.notifyIfStateChanged(state) }
-        }
+    interface Subscriber<S> {
+        fun onStateChanged(state: S)
     }
 
-    fun subscribe(subscriber: Subscriber<S>) {
-        scope.launch {
-            addSubscription(state, subscriber, { it })
-        }
-    }
-
-    fun <T> subscribe(subscriber: Subscriber<T>, transform: (S) -> T) {
-        scope.launch {
-            addSubscription(state, subscriber, transform)
-        }
-    }
-
-    fun <T> unsubscribe(subscriber: Subscriber<T>) {
-        scope.launch {
-            val subscription = subscriptions.find { it.subscriber == subscriber }
-            subscriptions.remove(subscription)
-        }
-    }
-
-    private suspend fun <T> addSubscription(
-        initialState: S,
-        subscriber: Subscriber<T>,
-        transform: (S) -> T
+    class Store<S>(
+        state: S,
+        val reducer: (S, Action) -> S
     ) {
-        val sub = Subscription(initialState, subscriber, transform)
-        sub.notify()
-        subscriptions.add(sub)
+
+        var state: S = state; private set
+
+        private val subscriptions = mutableListOf<Subscription<S, *>>()
+        private val executor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+        private val scope = CoroutineScope(executor)
+
+        fun dispatch(action: Action) {
+            scope.launch {
+                state = reducer(state, action)
+                subscriptions.forEach { it.notifyIfStateChanged(state) }
+            }
+        }
+
+        fun subscribe(subscriber: Subscriber<S>) {
+            scope.launch {
+                addSubscription(state, subscriber, { it })
+            }
+        }
+
+        fun <T> subscribe(subscriber: Subscriber<T>, transform: (S) -> T) {
+            scope.launch {
+                addSubscription(state, subscriber, transform)
+            }
+        }
+
+        fun <T> unsubscribe(subscriber: Subscriber<T>) {
+            scope.launch {
+                val subscription = subscriptions.find { it.subscriber == subscriber }
+                subscriptions.remove(subscription)
+            }
+        }
+
+        private suspend fun <T> addSubscription(
+            initialState: S,
+            subscriber: Subscriber<T>,
+            transform: (S) -> T
+        ) {
+            val sub = Subscription(initialState, subscriber, transform)
+            sub.notify()
+            subscriptions.add(sub)
+        }
     }
 }
 
