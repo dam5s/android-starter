@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
 import androidx.fragment.app.Fragment
 import io.damo.androidstarter.R
-import kotlinx.android.synthetic.main.fragment_categories_list.categoriesList
+import io.damo.androidstarter.databinding.FragmentCategoriesListBinding
 
 class CategoriesTabFragment : Fragment() {
 
@@ -15,21 +16,37 @@ class CategoriesTabFragment : Fragment() {
         fun navigateToCategory(category: CategoryView)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        inflater.inflate(R.layout.fragment_categories_list, container, false)
+    private var binding: FragmentCategoriesListBinding? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentCategoriesListBinding.inflate(inflater, container, false)
+        return binding!!.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { setupView(it) }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
     private fun setupView(activity: Activity) {
         activity.title = getString(R.string.categories_title)
+        binding?.categoriesList?.setupCategoriesList(activity)
+    }
 
-        val adapter = CategoriesListAdapter(activity)
+    private fun ListView.setupCategoriesList(activity: Activity) {
+        val categoriesListAdapter = CategoriesListAdapter(activity)
+        adapter = categoriesListAdapter
 
-        categoriesList.adapter = adapter
-        categoriesList.setOnItemClickListener { _, _, position, _ ->
-            val selectedCategory = adapter.getCategory(position)
+        setOnItemClickListener { _, _, position, _ ->
+            val selectedCategory = categoriesListAdapter.getCategory(position)
             (activity as? Delegate)?.navigateToCategory(selectedCategory)
         }
     }

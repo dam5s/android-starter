@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import io.damo.androidstarter.R
+import io.damo.androidstarter.backend.HttpError
+import io.damo.androidstarter.backend.RemoteData
+import io.damo.androidstarter.backend.RemoteData.Error
+import io.damo.androidstarter.backend.RemoteData.Loaded
+import io.damo.androidstarter.backend.RemoteData.Loading
+import io.damo.androidstarter.backend.RemoteData.NotLoaded
 import io.damo.androidstarter.categories.CategoryJokesListAdapter.Cell.ErrorCell
 import io.damo.androidstarter.categories.CategoryJokesListAdapter.Cell.LoadedCell
 import io.damo.androidstarter.categories.CategoryJokesListAdapter.Cell.LoadingCell
 import io.damo.androidstarter.categories.CategoryJokesListAdapter.Cell.NotLoadedCell
-import io.damo.androidstarter.randomjoke.JokeView
-import io.damo.androidstarter.support.Explanation
-import io.damo.androidstarter.support.RemoteData
-import io.damo.androidstarter.support.RemoteData.Error
-import io.damo.androidstarter.support.RemoteData.Loaded
-import io.damo.androidstarter.support.RemoteData.Loading
-import io.damo.androidstarter.support.RemoteData.NotLoaded
+import io.damo.androidstarter.joke.JokeView
 
 class CategoryJokesListAdapter(private val context: Context) : BaseAdapter() {
 
@@ -46,7 +46,7 @@ class CategoryJokesListAdapter(private val context: Context) : BaseAdapter() {
             is NotLoaded -> NotLoadedCell
             is Loading -> LoadingCell
             is Loaded -> LoadedCell(d.data[position])
-            is Error -> ErrorCell(d.explanation)
+            is Error -> ErrorCell(d.error)
         }
     }
 
@@ -87,6 +87,6 @@ class CategoryJokesListAdapter(private val context: Context) : BaseAdapter() {
         object NotLoadedCell : Cell()
         object LoadingCell : Cell()
         data class LoadedCell(val view: JokeView) : Cell()
-        data class ErrorCell(val explanation: Explanation) : Cell()
+        data class ErrorCell(val error: HttpError) : Cell()
     }
 }

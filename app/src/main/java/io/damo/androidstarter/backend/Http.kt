@@ -4,9 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.damo.androidstarter.support.Failure
-import io.damo.androidstarter.support.Result
-import io.damo.androidstarter.support.Success
+import io.damo.androidstarter.prelude.Failure
+import io.damo.androidstarter.prelude.Success
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -34,37 +33,42 @@ fun jsonBody(body: Any): RequestBody =
 fun <K, V> jsonBodyOf(vararg pair: Pair<K, V>): RequestBody =
     jsonBody(mapOf(*pair))
 
-fun Request.Builder.execute(): Result<Response> =
+fun Request.Builder.execute(): HttpResult<Response> =
     execute(okHttp)
 
-fun Request.Builder.execute(okHttpClient: OkHttpClient): Result<Response> =
+fun Request.Builder.execute(okHttpClient: OkHttpClient): HttpResult<Response> =
     try {
         val response = okHttpClient.newCall(build()).execute()
         Success(response)
     } catch (e: IOException) {
-        Failure("There was an error contacting the server: ${e.message}", e)
+        Failure(HttpError.Connection(e))
     }
 
-fun Result<Response>.requireStatusCode(expectedCode: Int): Result<Response> =
-    bind {
+fun HttpResult<Response>.requireStatusCode(expectedCode: Int): HttpResult<Response> =
+    bindSuccess {
         when (it.code) {
             expectedCode -> Success(it)
-            else -> Failure<Response>("Expected server response to be a $expectedCode")
+            else -> Failure(
+                HttpError.UnexpectedStatus(
+                    actual = it.code,
+                    expected = expectedCode
+                )
+            )
         }
     }
 
 fun Response.closeQuietly(): Unit =
-    use { Unit }
+    use {}
 
-inline fun <reified T : Any?> Response.parseJson(): Result<T> =
+inline fun <reified T : Any?> Response.parseJson(): HttpResult<T> =
     try {
         use {
             body
                 ?.let { Success(it.parseDangerously<T>()) }
-                ?: Failure("Could not parse null response body")
+                ?: Failure(HttpError.Deserialization())
         }
     } catch (e: IOException) {
-        Failure("There was an error parsing the JSON response: ${e.message}", e)
+        Failure(HttpError.Deserialization(e))
     }
 
 inline fun <reified T : Any?> ResponseBody.parseDangerously(): T =

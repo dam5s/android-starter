@@ -1,23 +1,29 @@
 package io.damo.androidstarter.backend
 
-import io.damo.androidstarter.support.Result
+import io.damo.androidstarter.prelude.Async
 import java.util.Locale
 
 class JokeApi(private val apiUrl: String) {
 
-    fun getRandomJoke(): Result<JokeJson> =
+    fun getRandomJoke(): HttpResult<JokeJson> =
         requestBuilder("$apiUrl/jokes/random")
             .execute()
             .requireStatusCode(200)
-            .bind { it.parseJson<OneJokeJson>() }
-            .map { it.value }
+            .bindSuccess { it.parseJson<OneJokeJson>() }
+            .mapSuccess { it.value }
 
-    fun getJokesForCategory(categoryName: String): Result<List<JokeJson>> =
+    fun getRandomJokeAsync(): AsyncHttpResult<JokeJson> =
+        Async { getRandomJoke() }
+
+    fun getJokesForCategory(categoryName: String): HttpResult<List<JokeJson>> =
         requestBuilder("$apiUrl/jokes/random/3?limitTo=[${categoryName.toLowerCase(Locale.ROOT)}]")
             .execute()
             .requireStatusCode(200)
-            .bind { it.parseJson<ManyJokesJson>() }
-            .map { it.value }
+            .bindSuccess { it.parseJson<ManyJokesJson>() }
+            .mapSuccess { it.value }
+
+    fun getJokesForCategoryAsync(categoryName: String): AsyncHttpResult<List<JokeJson>> =
+        Async { getJokesForCategory(categoryName) }
 }
 
 typealias OneJokeJson = ApiJsonResponse<JokeJson>

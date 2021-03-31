@@ -2,14 +2,19 @@ package io.damo.androidstarter
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_connected_test_start.startMainActivity
+import io.damo.androidstarter.databinding.ActivityConnectedTestStartBinding
 
-class ConnectedTestStartActivity : AppCompatActivity(R.layout.activity_connected_test_start) {
+class ConnectedTestStartActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityConnectedTestStartBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startMainActivity.setOnClickListener {
+        binding = ActivityConnectedTestStartBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.startMainActivity.setOnClickListener {
             MainActivity.start(this)
         }
     }

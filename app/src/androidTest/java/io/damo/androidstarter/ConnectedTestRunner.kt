@@ -38,13 +38,9 @@ class ConnectedTestRunner {
     @Test
     fun allTests() {
         val allTests = listOf(
-            { AppPreferencesTest(testAppContext).testSaveJoke() },
-            { AppPreferencesTest(testAppContext).testGetJoke() },
-
             { MainActivityTest(testAppContext).testNavigation() },
             { MainActivityTest(testAppContext).testSavingStateOnScreenRotation() },
 
-            { RandomJokeTabTest(testAppContext).testCreation_WhenJokeIsCached() },
             { RandomJokeTabTest(testAppContext).testCreation_RefreshingTheJoke() },
             { RandomJokeTabTest(testAppContext).testCreation_OnLoadFailure() },
 

@@ -5,56 +5,73 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.get
 import io.damo.androidstarter.R
-import io.damo.androidstarter.activityViewModelProvider
-import io.damo.androidstarter.support.RemoteData
-import io.damo.androidstarter.support.RemoteData.Error
-import io.damo.androidstarter.support.RemoteData.Loaded
-import io.damo.androidstarter.support.RemoteData.Loading
-import io.damo.androidstarter.support.RemoteData.NotLoaded
-import io.damo.androidstarter.support.observe
-import kotlinx.android.synthetic.main.fragment_random_joke_tab.jokeTextView
-import kotlinx.android.synthetic.main.fragment_random_joke_tab.swipeRefresh
+import io.damo.androidstarter.appComponent
+import io.damo.androidstarter.backend.RemoteData
+import io.damo.androidstarter.backend.RemoteData.Error
+import io.damo.androidstarter.backend.RemoteData.Loaded
+import io.damo.androidstarter.backend.RemoteData.Loading
+import io.damo.androidstarter.backend.RemoteData.NotLoaded
+import io.damo.androidstarter.databinding.FragmentRandomJokeTabBinding
+import io.damo.androidstarter.joke.JokeView
+import io.damo.androidstarter.prelude.Subscriber
+import io.damo.androidstarter.stateStore
 
-class RandomJokeTabFragment : Fragment() {
+class RandomJokeTabFragment : Fragment(), Subscriber<RemoteData<JokeView>> {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        inflater.inflate(R.layout.fragment_random_joke_tab, container, false)
+    private var binding: FragmentRandomJokeTabBinding? = null
+
+    private val swipeRefresh get() = binding?.swipeRefresh
+    private val jokeTextView get() = binding?.jokeTextView
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentRandomJokeTabBinding.inflate(inflater, container, false)
+        return binding!!.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.title = getString(R.string.random_title)
 
-        val viewModel = activityViewModelProvider.get<RandomJokeViewModel>()
+        stateStore.subscribe(this) { it.randomJoke }
 
-        viewModel.joke().observe(this) { jokeData ->
-            loadJokeIfNeeded(jokeData, viewModel)
-            updateJokeTextView(jokeData)
-            updateSwipeRefresh(jokeData)
+        swipeRefresh?.setOnRefreshListener {
+            loadJoke()
         }
+    }
 
-        swipeRefresh.setOnRefreshListener {
-            viewModel.loadJoke()
-        }
+    override fun onDestroyView() {
+        stateStore.unsubscribe(this)
+        super.onDestroyView()
+    }
+
+    override fun onStateChanged(state: RemoteData<JokeView>) {
+        loadJokeIfNeeded(state)
+        updateJokeTextView(state)
+        updateSwipeRefresh(state)
     }
 
     private fun updateSwipeRefresh(jokeData: RemoteData<JokeView>) {
         if (jokeData is Loading) return
-        swipeRefresh.isRefreshing = false
+        swipeRefresh?.isRefreshing = false
     }
 
     private fun updateJokeTextView(jokeData: RemoteData<JokeView>) {
-        jokeTextView.text =
+        jokeTextView?.text =
             when (jokeData) {
                 is NotLoaded -> ""
                 is Loading -> context?.getString(R.string.loading) ?: ""
                 is Loaded -> jokeData.data.content
-                is Error -> jokeData.explanation.message
+                is Error -> jokeData.error.message()
             }
     }
 
-    private fun loadJokeIfNeeded(jokeData: RemoteData<JokeView>, viewModel: RandomJokeViewModel) {
-        if (jokeData is NotLoaded)
-            viewModel.loadJoke()
+    private fun loadJokeIfNeeded(jokeData: RemoteData<JokeView>) {
+        if (jokeData is NotLoaded) loadJoke()
     }
+
+    private fun loadJoke() = loadJoke(stateStore, appComponent.jokeApi)
 }

@@ -1,6 +1,7 @@
 package io.damo.androidstarter
 
 import android.graphics.Point
+import androidx.test.uiautomator.UiDevice
 import io.damo.androidstarter.instrumentationsupport.TestAppContext
 import io.damo.androidstarter.instrumentationsupport.TestDispatcher.Companion.randomJokes
 import io.damo.androidstarter.instrumentationsupport.device
@@ -31,19 +32,25 @@ class MainActivityTest(testAppContext: TestAppContext) {
         mainScreen.clickOnCategoriesTab()
         mainScreen.checkCategoriesTabIsDisplayed()
 
-        rotateScreen()
+        rotateLeft()
+
+        waitForText(R.string.categories_title)
+
+        rotateNatural()
 
         waitForText(R.string.categories_title)
     }
 }
 
-private fun rotateScreen() {
-    val device = device()
-    val portraitResolution = device.displaySizeDp
+private fun UiDevice.rotateWith(rotate: (UiDevice) -> Unit) {
+    val previousResolution = displaySizeDp
 
-    device.setOrientationLeft()
+    rotate(this)
 
     await until {
-        device.displaySizeDp == Point(portraitResolution.y, portraitResolution.x)
+        displaySizeDp == Point(previousResolution.y, previousResolution.x)
     }
 }
+
+private fun rotateLeft() = device().rotateWith { it.setOrientationLeft() }
+private fun rotateNatural() = device().rotateWith { it.setOrientationNatural() }

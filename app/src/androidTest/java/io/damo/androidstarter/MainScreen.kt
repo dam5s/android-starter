@@ -23,7 +23,7 @@ class MainScreen(testAppContext: TestAppContext) {
     }
 
     fun assertServerErrorDisplayed() {
-        onView(withId(R.id.jokeTextView)).check(matches(withText("Expected server response to be a 200")))
+        onView(withId(R.id.jokeTextView)).check(matches(withText("There was an error on the server")))
     }
 
     fun startRefresh() {

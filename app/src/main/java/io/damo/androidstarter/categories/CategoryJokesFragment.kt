@@ -7,13 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.get
+import io.damo.androidstarter.AppLifeCycle.categoryJokes
+import io.damo.androidstarter.Category
 import io.damo.androidstarter.R
-import io.damo.androidstarter.activityViewModelProvider
-import io.damo.androidstarter.support.observe
-import kotlinx.android.synthetic.main.fragment_category_jokes.categoryJokesList
+import io.damo.androidstarter.appComponent
+import io.damo.androidstarter.backend.RemoteData
+import io.damo.androidstarter.categories.CategoryJokesInteractions.loadCategory
+import io.damo.androidstarter.databinding.FragmentCategoryJokesBinding
+import io.damo.androidstarter.joke.JokeView
+import io.damo.androidstarter.prelude.Subscriber
+import io.damo.androidstarter.stateStore
 
-class CategoryJokesFragment : Fragment() {
+class CategoryJokesFragment : Fragment(), Subscriber<RemoteData<List<JokeView>>> {
 
     companion object {
         private const val categoryNameKey = "categoryName"
@@ -26,27 +31,45 @@ class CategoryJokesFragment : Fragment() {
         fun Bundle.getCategoryName() = getString(categoryNameKey)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        inflater.inflate(R.layout.fragment_category_jokes, container, false)
+    private var binding: FragmentCategoryJokesBinding? = null
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val categoryName = arguments?.getCategoryName()
-            ?: throw IllegalStateException("Fragment got instantiated without category name argument")
+    private val list get() = binding?.categoryJokesList
+    private val adapter get() = list?.adapter as? CategoryJokesListAdapter
 
-        setupView(requireActivity(), categoryName)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentCategoryJokesBinding.inflate(inflater, container, false)
+        return binding!!.root
     }
 
-    private fun setupView(activity: Activity, categoryName: String) {
-        val adapter = CategoryJokesListAdapter(activity)
-        val viewModel = activityViewModelProvider.get<CategoryJokesViewModel>()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val category = arguments?.getCategoryName()
+            ?: throw IllegalStateException("Fragment got instantiated without category name argument")
 
-        activity.title = getString(R.string.category_title, categoryName)
-        categoryJokesList.adapter = adapter
+        activity?.let { setupView(it, category) }
+    }
 
-        viewModel.jokes(categoryName).observe(this) { remoteData ->
-            adapter.remoteData = remoteData
+    override fun onDestroyView() {
+        super.onDestroyView()
+        stateStore.unsubscribe(this)
+        binding = null
+    }
+
+    override fun onStateChanged(state: RemoteData<List<JokeView>>) {
+        adapter?.remoteData = state
+    }
+
+    private fun setupView(activity: Activity, category: Category) {
+        activity.title = getString(R.string.category_title, category)
+        list?.adapter = CategoryJokesListAdapter(activity)
+
+        stateStore.subscribe(this) {
+            it.categoryJokes(category)
         }
 
-        viewModel.loadCategory(categoryName)
+        loadCategory(stateStore, appComponent.jokeApi, category)
     }
 }

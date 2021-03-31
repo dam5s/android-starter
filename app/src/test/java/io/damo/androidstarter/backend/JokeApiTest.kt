@@ -1,6 +1,5 @@
 package io.damo.androidstarter.backend
 
-import io.damo.androidstarter.support.Success
 import io.damo.androidstarter.testsupport.baseUrl
 import io.damo.androidstarter.testsupport.enqueue
 import io.damo.androidstarter.testsupport.startMockServer
@@ -37,7 +36,7 @@ class JokeApiTest {
         val result = api.getRandomJoke()
 
         val expectedJoke = JokeJson(605, jokeContent)
-        assertThat(result).isEqualTo(Success(expectedJoke))
+        assertThat(result).isEqualTo(HttpSuccess(expectedJoke))
 
         val recordedRequest = mockServer.takeRequest()
         assertThat(recordedRequest.method).isEqualTo("GET")
@@ -64,7 +63,7 @@ class JokeApiTest {
             JokeJson(606, "Joke #606"),
             JokeJson(607, "Joke #607")
         )
-        assertThat(result).isEqualTo(Success(expectedJokes))
+        assertThat(result).isEqualTo(HttpSuccess(expectedJokes))
 
         val recordedRequest = mockServer.takeRequest()
         assertThat(recordedRequest.method).isEqualTo("GET")

@@ -14,12 +14,10 @@ import androidx.fragment.app.commit
 import io.damo.androidstarter.categories.CategoriesTabFragment
 import io.damo.androidstarter.categories.CategoryJokesFragment
 import io.damo.androidstarter.categories.CategoryView
+import io.damo.androidstarter.databinding.ActivityMainBinding
 import io.damo.androidstarter.randomjoke.RandomJokeTabFragment
-import kotlinx.android.synthetic.main.activity_main.bottomNavigation
 
-class MainActivity :
-    AppCompatActivity(R.layout.activity_main),
-    CategoriesTabFragment.Delegate {
+class MainActivity : AppCompatActivity(), CategoriesTabFragment.Delegate {
 
     companion object {
         fun start(context: Context) {
@@ -29,12 +27,16 @@ class MainActivity :
         }
     }
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         switchTab(Tab.Random)
 
-        bottomNavigation.setOnNavigationItemSelectedListener { item ->
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
             switchTabByItemId(item.itemId)
         }
 
