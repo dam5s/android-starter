@@ -49,6 +49,5 @@ data class CategoryView(val name: String) : Serializable
 
 private val allCategories = listOf(
     CategoryView("Explicit"),
-    CategoryView("Nerdy"),
-    CategoryView("Other")
+    CategoryView("Nerdy")
 )
