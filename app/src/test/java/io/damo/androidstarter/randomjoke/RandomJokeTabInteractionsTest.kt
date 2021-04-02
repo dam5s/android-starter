@@ -5,7 +5,7 @@ import io.damo.androidstarter.backend.JokeApi
 import io.damo.androidstarter.backend.JokeJson
 import io.damo.androidstarter.backend.RemoteData
 import io.damo.androidstarter.backend.RemoteDataAssert.Companion.assertThat
-import io.damo.androidstarter.joke.JokeView
+import io.damo.androidstarter.ui.JokeView
 import io.damo.androidstarter.prelude.Async
 import io.damo.androidstarter.prelude.Store
 import io.damo.androidstarter.prelude.Success

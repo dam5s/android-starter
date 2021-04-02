@@ -1,21 +1,21 @@
 package io.damo.androidstarter
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import io.damo.androidstarter.databinding.ActivityConnectedTestStartBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.ui.res.stringResource
 
-class ConnectedTestStartActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityConnectedTestStartBinding
+class ConnectedTestStartActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityConnectedTestStartBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        binding.startMainActivity.setOnClickListener {
-            MainActivity.start(this)
+        setContent {
+            Button(onClick = { MainActivity.start(this) }) {
+                Text(stringResource(R.string.start_main_activity))
+            }
         }
     }
 }

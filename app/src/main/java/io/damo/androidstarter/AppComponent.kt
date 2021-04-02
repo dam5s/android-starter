@@ -1,6 +1,5 @@
 package io.damo.androidstarter
 
-import android.app.Application
 import io.damo.androidstarter.backend.JokeApi
 
 interface AppComponent {
@@ -8,7 +7,7 @@ interface AppComponent {
     val initialState: AppLifeCycle.State
 }
 
-class DefaultAppComponent(app: Application) : AppComponent {
+class DefaultAppComponent : AppComponent {
     override val jokeApi = JokeApi(BuildConfig.API_URL)
     override val initialState = AppLifeCycle.State()
 }

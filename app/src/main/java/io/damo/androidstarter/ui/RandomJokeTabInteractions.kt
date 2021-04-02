@@ -4,7 +4,7 @@ import io.damo.androidstarter.AppLifeCycle
 import io.damo.androidstarter.AppLifeCycle.Action.FinishLoadingRandomJoke
 import io.damo.androidstarter.AppLifeCycle.Action.StartLoadingRandomJoke
 import io.damo.androidstarter.backend.JokeApi
-import io.damo.androidstarter.joke.JokeView
+import io.damo.androidstarter.ui.JokeView
 import io.damo.androidstarter.prelude.Redux
 import io.damo.androidstarter.prelude.mapSuccess
 

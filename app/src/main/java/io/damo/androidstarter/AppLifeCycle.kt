@@ -5,18 +5,24 @@ import io.damo.androidstarter.AppLifeCycle.Action.FinishLoadingCategory
 import io.damo.androidstarter.AppLifeCycle.Action.FinishLoadingRandomJoke
 import io.damo.androidstarter.AppLifeCycle.Action.StartLoadingCategory
 import io.damo.androidstarter.AppLifeCycle.Action.StartLoadingRandomJoke
+import io.damo.androidstarter.AppLifeCycle.Action.SelectTab
 import io.damo.androidstarter.AppLifeCycle.State
 import io.damo.androidstarter.backend.HttpResult
 import io.damo.androidstarter.backend.RemoteData
 import io.damo.androidstarter.backend.toRemoteData
-import io.damo.androidstarter.joke.JokeView
+import io.damo.androidstarter.ui.JokeView
 import io.damo.androidstarter.prelude.Redux
 
 typealias Category = String
 
 object AppLifeCycle {
+    enum class Tab {
+        Random,
+        Categories
+    }
 
     data class State(
+        val tab: Tab = Tab.Random,
         val jokesByCategory: Map<Category, RemoteData<List<JokeView>>> = emptyMap(),
         val randomJoke: RemoteData<JokeView> = RemoteData.NotLoaded()
     )
@@ -25,6 +31,8 @@ object AppLifeCycle {
         jokesByCategory[category] ?: RemoteData.NotLoaded()
 
     sealed class Action : Redux.Action {
+        data class SelectTab(val tab: Tab) : Action()
+
         object StartLoadingRandomJoke : Action()
         data class FinishLoadingRandomJoke(val result: HttpResult<JokeView>) : Action()
 
@@ -45,6 +53,8 @@ object AppLifeCycle {
 
 private fun appReducer(state: State, action: Action): State =
     when (action) {
+        is SelectTab -> state.copy(tab = action.tab)
+
         StartLoadingRandomJoke -> state.copy(randomJoke = RemoteData.Loading())
         is FinishLoadingRandomJoke -> state.copy(randomJoke = action.result.toRemoteData())
 

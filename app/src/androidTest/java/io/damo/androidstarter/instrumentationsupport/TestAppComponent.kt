@@ -5,7 +5,7 @@ import io.damo.androidstarter.AppComponent
 import io.damo.androidstarter.DefaultAppComponent
 import io.damo.androidstarter.backend.JokeApi
 
-class TestAppComponent(app: Application) : AppComponent by DefaultAppComponent(app) {
+class TestAppComponent(app: Application) : AppComponent by DefaultAppComponent() {
 
     val testDispatcher = TestDispatcher()
 
