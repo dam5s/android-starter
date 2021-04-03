@@ -6,10 +6,10 @@ import io.damo.androidstarter.prelude.Redux
 
 class TestAppContext(app: StarterApp) {
 
-    val testComponent = TestAppComponent(app)
+    val testComponent = TestAppContainer(app)
 
     init {
-        app.appComponent = testComponent
+        app.appContainer = testComponent
         app.stateStore = Redux.Store(testComponent.initialState, AppLifeCycle::reducer)
     }
 

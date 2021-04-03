@@ -4,9 +4,19 @@ import io.damo.androidstarter.prelude.Failure
 import io.damo.androidstarter.prelude.Success
 
 sealed class RemoteData<T> {
+    fun startLoading(): RemoteData<T> =
+        when (this) {
+            is NotLoaded -> Loading()
+            is Loading -> Loading()
+            is Loaded -> Refreshing(data)
+            is Refreshing -> Refreshing(data)
+            is Error -> Loading()
+        }
+
     class NotLoaded<T> : RemoteData<T>()
     class Loading<T> : RemoteData<T>()
     data class Loaded<T>(val data: T) : RemoteData<T>()
+    data class Refreshing<T>(val data: T) : RemoteData<T>()
     data class Error<T>(val error: HttpError) : RemoteData<T>()
 }
 

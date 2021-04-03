@@ -5,10 +5,11 @@ import io.damo.androidstarter.backend.JokeApi
 import io.damo.androidstarter.backend.JokeJson
 import io.damo.androidstarter.backend.RemoteData
 import io.damo.androidstarter.backend.RemoteDataAssert.Companion.assertThat
-import io.damo.androidstarter.ui.JokeView
+import io.damo.androidstarter.ui.randomjoke.RandomJokeView
 import io.damo.androidstarter.prelude.Async
-import io.damo.androidstarter.prelude.Store
+import io.damo.androidstarter.prelude.Redux
 import io.damo.androidstarter.prelude.Success
+import io.damo.androidstarter.ui.randomjoke.RandomJokeInteractions
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +24,7 @@ import org.junit.Test
 class RandomJokeTabInteractionsTest {
 
     private val api = mockk<JokeApi>()
-    private val store = Store(AppLifeCycle.State(), AppLifeCycle::reducer)
+    private val store = Redux.Store(AppLifeCycle.State(), AppLifeCycle::reducer)
 
     @Before
     fun setup() {
@@ -34,12 +35,12 @@ class RandomJokeTabInteractionsTest {
     fun `test loadJoke()`() {
         every { api.getRandomJokeAsync() } returns Async { Success(JokeJson(10, "Oh hai!")) }
 
-        loadJoke(store, api)
+        RandomJokeInteractions.load(store::dispatch, api)
 
         await until {
             store.state.randomJoke is RemoteData.Loaded
         }
 
-        assertThat(store.state.randomJoke).isLoadedWith(JokeView("Oh hai!"))
+        assertThat(store.state.randomJoke).isLoadedWith(RandomJokeView("Oh hai!"))
     }
 }
